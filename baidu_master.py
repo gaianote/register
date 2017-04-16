@@ -124,13 +124,13 @@ class Baidu_phone_master(Baidu_master):
 
 keyword = '汤不热账号'
 title = '汤不热账号交易 | tumblr 汤不热账号24小时自动发货'
-hits = 3600
+hits = 100
 '''
 
 '''
 baidu_pc_master = Baidu_pc_master(keyword,title,hits)
 baidu_phone_master = Baidu_phone_master(keyword,title,hits)
-for i in range(10):
+while True:
   baidu_pc_master.main()
   baidu_phone_master.main()
 

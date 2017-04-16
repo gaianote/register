@@ -68,7 +68,7 @@ class Register(rem.Claw):
 
 while True:
   try:
-    rem.adsl.reconent()
+    rem.adsl.reconnect()
     register = Register()
     register.start()
   except Exception as e:

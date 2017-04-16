@@ -3,7 +3,7 @@ from .web.adsl import adsl
 from .web.get_active_link import Get_active_link
 from .web.get_useragent import get_useragent
 from .web.get_proxy_ip import get_proxy_ip
-from .lib.ocr_baidu import ocr_baidu
+#from .lib.ocr_baidu import ocr_baidu
 from .lib.damatu import dmt
 from .lib.xingchenma import xcm
 from .tool.sql import run_sql
