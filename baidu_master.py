@@ -44,7 +44,7 @@ class Baidu_master(rem.Claw):
     self.hits_list = hits_list
     print(self.hits_list)
   def start(self):
-    #rem.adsl.reconnect()
+    rem.adsl.reconnect()
     self.search_title()
     self.find_title()
     self.driver.quit()
@@ -58,12 +58,12 @@ class Baidu_master(rem.Claw):
     # 每小时获取一次点击列表
     if hour != self.hour_lock:
       self.hour_lock = hour
-      task_count = self.hits_list[hour]
+      self.task_count = self.hits_list[hour]
     # 主程序运行区
-    if task_count > 0:
-      print(hour,task_count)
+    if self.task_count > 0:
+      print(hour,self.task_count)
       self.start()
-      task_count -= 1
+      self.task_count -= 1
 class Baidu_pc_master(Baidu_master):
   def search_title(self):
     self.fake('pc')
@@ -111,6 +111,7 @@ class Baidu_phone_master(Baidu_master):
           height = title.location_once_scrolled_into_view
           print(height)
           self.run_js('window.scrollTo(0, %s)'%height)
+          time.sleep(1)
           title.click()
           self.random_sleep(50,60)
           return
@@ -131,8 +132,13 @@ hits = 100
 baidu_pc_master = Baidu_pc_master(keyword,title,hits)
 baidu_phone_master = Baidu_phone_master(keyword,title,hits)
 while True:
-  baidu_pc_master.main()
-  baidu_phone_master.main()
+  try:
+    baidu_pc_master.main()
+    baidu_phone_master.main()
+  except Exception as e:
+    print(e)
+
+
 
 
 

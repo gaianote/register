@@ -19,13 +19,17 @@ class Get_active_link(Claw):
     self.query('.btn-inner')[1].click()
     # 寻找邮件标题''
     titles = self.query('.mail-list-subject')
-    for title in titles:
-      if title.text == self.mail_title:
-        title.click()
-        break
-    # 得到激活链接，使用self.query确认邮件已加载
-    self.active_link = self.query(".mRead-cont a")[2].get_attribute('href')
-
+    while True:
+      for title in titles:
+        if title.text == self.mail_title:
+          title.click()
+          # 得到激活链接，使用self.query确认邮件已加载
+          self.active_link = self.query(".mRead-cont a")[2].get_attribute('href')
+          return
+      time.sleep(10)
+      self.driver.refresh()
+    
+    
   def main(self):
     self.fake('phone')
     self.get('http://smart.mail.163.com/')
