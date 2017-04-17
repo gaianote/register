@@ -24,14 +24,20 @@ class Register(rem.Claw):
     self.query('#vdCodeTxt').send_keys(capcha)
     time.sleep(1)
     self.query('#emailStn').click()
+
     if self.query('.header .hd'):
       print('已发送激活链接')
       self.active_link = rem.Get_active_link(self.mail_uname,self.mail_upwd,self.mail_title).main()
       self.fill_site_info()
     elif self.query('#emailStn'):
-      print('此账号异常...')
-      sql = 'update mail_163 set site_name = "ERROR" where mail_uname = "%s"'%self.mail_uname
-      rem.run_sql(sql)
+      self.query('#captchaImg').click()
+      time.sleep(2)
+      self.save_elemshot('#captchaImg','img/captcha.png')
+      capcha = rem.dmt.decode('img/captcha.png',43)
+      self.query('#vdCodeTxt').clear()
+      self.query('#vdCodeTxt').send_keys(capcha)
+      time.sleep(1)
+      self.query('#emailStn').click()
   # 填写bilibil用户名与密码
   def fill_site_info(self):
     print('填写网站信息')
