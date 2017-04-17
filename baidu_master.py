@@ -63,6 +63,7 @@ class Baidu_master(rem.Claw):
     if hour != self.hour_lock:
       self.hour_lock = hour
       self.task_count = self.hits_list[hour]
+      print('当前时间为%s当前总任务数为%s'%(hour,self.task_count))
     # 主程序运行区
     if self.task_count > 0:
       print(hour,self.task_count)
@@ -136,8 +137,11 @@ hits = 100
 baidu_pc_master = Baidu_pc_master(keyword,title,hits)
 baidu_phone_master = Baidu_phone_master(keyword,title,hits)
 
-baidu_pc_master.main()
-baidu_phone_master.main()
+while True:
+  baidu_pc_master.main()
+  time.sleep(60)
+  baidu_phone_master.main()
+  time.sleep(60)
 
 
 
