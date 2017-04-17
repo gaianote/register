@@ -17,19 +17,29 @@ class Get_active_link(Claw):
   def read_mail(self):
     self.query('.msgbox-hd.fn-alignCenter')
     self.query('.btn-inner')[1].click()
-    # 寻找邮件标题''
-    titles = self.query('.mail-list-subject')
-    while True:
-      for title in titles:
-        if title.text == self.mail_title:
-          title.click()
-          # 得到激活链接，使用self.query确认邮件已加载
+    for i in range(10):
+      # 寻找邮件标题''
+      titles = self.query('.mail-list-subject')
+      # 如果邮箱有封邮件
+      if isinstance(titles,list):
+        for title in titles:
+          if title.text == self.mail_title:
+            title.click()
+            # 得到激活链接，使用self.query确认邮件已加载
+            self.active_link = self.query(".mRead-cont a")[2].get_attribute('href')
+            return
+      # 如果只有一封邮件
+      else:
+        if titles.text == self.mail_title:
+          titles.click()
           self.active_link = self.query(".mRead-cont a")[2].get_attribute('href')
           return
       time.sleep(10)
       self.driver.refresh()
-    
-    
+    # 如果收不到邮箱
+    sql = 'update mail_163 set site_name = "ERROR" where mail_name = "%s"'%self.mail_name
+    rem.run_sql(sql)
+
   def main(self):
     self.fake('phone')
     self.get('http://smart.mail.163.com/')
