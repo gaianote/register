@@ -45,9 +45,13 @@ class Baidu_master(rem.Claw):
     print(self.hits_list)
   def start(self):
     rem.adsl.reconnect()
-    self.search_title()
-    self.find_title()
-    self.driver.quit()
+    try:
+      self.search_title()
+      self.find_title()
+    except Exception as e:
+      print(e)
+    finally:
+      self.driver.quit()
   def main(self):
     self.random_sleep(0,1)
     # 得到当前整点数
@@ -80,9 +84,9 @@ class Baidu_pc_master(Baidu_master):
       self.random_scroll()
       for title in self.query('h3 a'):
         if title.text ==self.title:
-          height = title.location_once_scrolled_into_view
-          print(height)
-          self.run_js('window.scrollTo(0, %s)'%height)
+          point = title.location_once_scrolled_into_view
+          print(point)
+          self.run_js('window.scrollTo(%s, %s)'%(point['x'],point['y']))
           title.click()
           self.random_sleep(50,60)
           return
@@ -108,9 +112,9 @@ class Baidu_phone_master(Baidu_master):
       self.random_scroll()
       for title in self.query('h3'):
         if title.text ==self.title:
-          height = title.location_once_scrolled_into_view
-          print(height)
-          self.run_js('window.scrollTo(0, %s)'%height)
+          point = title.location_once_scrolled_into_view
+          print(point)
+          self.run_js('window.scrollTo(%s, %s)'%(point['x'],point['y']))
           time.sleep(1)
           title.click()
           self.random_sleep(50,60)
@@ -131,12 +135,10 @@ hits = 100
 '''
 baidu_pc_master = Baidu_pc_master(keyword,title,hits)
 baidu_phone_master = Baidu_phone_master(keyword,title,hits)
-while True:
-  try:
-    baidu_pc_master.main()
-    baidu_phone_master.main()
-  except Exception as e:
-    print(e)
+
+baidu_pc_master.main()
+baidu_phone_master.main()
+
 
 
 
